@@ -30,10 +30,28 @@ const staticRangeHandler = {
   range: {},
   isSelected(range) {
     const definedRange = this.range();
-    return (
-      isSameDay(range.startDate, definedRange.startDate) &&
-      isSameDay(range.endDate, definedRange.endDate)
-    );
+
+    // Infinity Past (eq. Past Due)
+    if (range.startDate === null && range.endDate) {
+      return (
+        range.startDate === definedRange.startDate &&
+        isSameDay(range.endDate, definedRange.endDate)
+      );
+
+    // Infinity Future
+    } else if (range.endDate === null && range.startDate) {
+      return (
+        range.endDate === definedRange.endDate &&
+        isSameDay(range.startDate, definedRange.startDate)
+      );
+
+    // Rest
+    } else {
+      return (
+        isSameDay(range.startDate, definedRange.startDate) &&
+        isSameDay(range.endDate, definedRange.endDate)
+      );
+    }
   },
 };
 

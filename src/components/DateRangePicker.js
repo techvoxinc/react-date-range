@@ -10,7 +10,9 @@ class DateRangePicker extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      focusedRange: [findNextRangeIndex(props.ranges), 0],
+      // focusedRange: [findNextRangeIndex(props.ranges), 0],
+      // For now we will be showing only one Range
+      focusedRange: [0, 0],
     };
     this.styles = generateStyles([coreStyles, props.classNames]);
   }

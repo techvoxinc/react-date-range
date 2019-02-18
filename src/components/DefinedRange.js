@@ -16,8 +16,10 @@ class DefinedRanges extends Component {
   }
 
   handleRangeChange(range) {
+    const cleanRange = {key: 'selection'}; // If there is no preselected range
     const { onChange, ranges, focusedRange } = this.props;
-    const selectedRange = ranges[focusedRange[0]];
+    const selectedRange = (focusedRange[0]) ? ranges[focusedRange[0]] : cleanRange;
+
     if (!onChange || !selectedRange) return;
     onChange({
       [selectedRange.key || `range${focusedRange[0] + 1}`]: { ...selectedRange, ...range },
@@ -26,7 +28,8 @@ class DefinedRanges extends Component {
 
   getSelectedRange(ranges, staticRange) {
     const focusedRangeIndex = ranges.findIndex(range => {
-      if (!range.startDate || !range.endDate || range.disabled) return false;
+      // && instead of || because of Past Due Date
+      if ((!range.startDate && !range.endDate) || range.disabled) return false;
       return staticRange.isSelected(range);
     });
     const selectedRange = ranges[focusedRangeIndex];
