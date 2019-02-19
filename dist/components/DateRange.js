@@ -195,7 +195,7 @@ var DateRange = function (_Component) {
 
       var focusedRange = this.props.focusedRange || this.state.focusedRange;
       var color = focusedRange[0] ? ranges[focusedRange[0]].color || rangeColors[focusedRange[0]] : color;
-      this.setState({ preview: _extends({}, val.range, { color: color }) });
+      this.setState({ preview: _extends({}, val, { color: color }) });
     }
   }, {
     key: 'render',
