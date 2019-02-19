@@ -56,7 +56,7 @@ var DefinedRanges = function (_Component) {
 
   _createClass(DefinedRanges, [{
     key: 'handleRangeChange',
-    value: function handleRangeChange(range) {
+    value: function handleRangeChange(range, staticRange) {
       var cleanRange = { key: 'selection' }; // If there is no preselected range
       var _props = this.props,
           onChange = _props.onChange,
@@ -66,7 +66,7 @@ var DefinedRanges = function (_Component) {
       var selectedRange = focusedRange[0] ? ranges[focusedRange[0]] : cleanRange;
 
       if (!onChange || !selectedRange) return;
-      onChange(_defineProperty({}, selectedRange.key || 'range' + (focusedRange[0] + 1), _extends({}, selectedRange, range)));
+      onChange(_defineProperty({}, selectedRange.key || 'range' + (focusedRange[0] + 1), _extends({}, selectedRange, range, { id: staticRange.id })));
     }
   }, {
     key: 'getSelectedRange',
@@ -122,7 +122,7 @@ var DefinedRanges = function (_Component) {
                 },
                 key: i,
                 onClick: function onClick() {
-                  return _this2.handleRangeChange(staticRange.range(_this2.props));
+                  return _this2.handleRangeChange(staticRange.range(_this2.props), staticRange);
                 },
                 onFocus: function onFocus() {
                   return onPreviewChange && onPreviewChange(staticRange.range(_this2.props));

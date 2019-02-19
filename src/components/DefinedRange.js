@@ -15,14 +15,14 @@ class DefinedRanges extends Component {
     this.handleRangeChange = this.handleRangeChange.bind(this);
   }
 
-  handleRangeChange(range) {
+  handleRangeChange(range, staticRange) {
     const cleanRange = {key: 'selection'}; // If there is no preselected range
     const { onChange, ranges, focusedRange } = this.props;
     const selectedRange = (focusedRange[0]) ? ranges[focusedRange[0]] : cleanRange;
 
     if (!onChange || !selectedRange) return;
     onChange({
-      [selectedRange.key || `range${focusedRange[0] + 1}`]: { ...selectedRange, ...range },
+      [selectedRange.key || `range${focusedRange[0] + 1}`]: { ...selectedRange, ...range, id: staticRange.id },
     });
   }
 
@@ -65,7 +65,7 @@ class DefinedRanges extends Component {
                     : null,
                 }}
                 key={i}
-                onClick={() => this.handleRangeChange(staticRange.range(this.props))}
+                onClick={() => this.handleRangeChange(staticRange.range(this.props), staticRange)}
                 onFocus={() => onPreviewChange && onPreviewChange(staticRange.range(this.props))}
                 onMouseOver={() =>
                   onPreviewChange && onPreviewChange(staticRange.range(this.props))
