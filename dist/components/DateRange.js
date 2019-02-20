@@ -101,10 +101,11 @@ var DateRange = function (_Component) {
 
       var focusedRangeIndex = focusedRange[0];
       var selectedRange = ranges[focusedRangeIndex];
-      if (!selectedRange || !onChange) return {};
+      if (!onChange) return {};
 
-      var startDate = selectedRange.startDate,
-          endDate = selectedRange.endDate;
+      var _ref = selectedRange ? selectedRange : { startDate: new Date() },
+          startDate = _ref.startDate,
+          endDate = _ref.endDate;
 
       if (!endDate) endDate = new Date(startDate);
       var nextFocusRange = void 0;
@@ -126,9 +127,9 @@ var DateRange = function (_Component) {
       var isStartDateSelected = focusedRange[1] === 0;
       if ((0, _isBefore2.default)(endDate, startDate)) {
         isStartDateSelected = !isStartDateSelected;
-        var _ref = [endDate, startDate];
-        startDate = _ref[0];
-        endDate = _ref[1];
+        var _ref2 = [endDate, startDate];
+        startDate = _ref2[0];
+        endDate = _ref2[1];
       }
 
       var inValidDatesWithinRange = disabledDates.filter(function (disabledDate) {
@@ -159,6 +160,7 @@ var DateRange = function (_Component) {
   }, {
     key: 'setSelection',
     value: function setSelection(value, isSingleValue) {
+      var cleanRange = { key: 'selection' }; // If there is no preselected range
       var _props2 = this.props,
           onChange = _props2.onChange,
           ranges = _props2.ranges,
@@ -166,7 +168,8 @@ var DateRange = function (_Component) {
 
       var focusedRange = this.props.focusedRange || this.state.focusedRange;
       var focusedRangeIndex = focusedRange[0];
-      var selectedRange = ranges[focusedRangeIndex];
+      var selectedRange = focusedRange[0] ? ranges[focusedRange[0]] : cleanRange;
+
       if (!selectedRange) return;
       var newSelection = this.calcNewSelection(value, isSingleValue);
       onChange(_defineProperty({}, selectedRange.key || 'range' + (focusedRangeIndex + 1), _extends({}, selectedRange, newSelection.range)));
@@ -195,7 +198,12 @@ var DateRange = function (_Component) {
 
       var focusedRange = this.props.focusedRange || this.state.focusedRange;
       var color = focusedRange[0] ? ranges[focusedRange[0]].color || rangeColors[focusedRange[0]] : color;
-      this.setState({ preview: _extends({}, val, { color: color }) });
+
+      if (val.range) {
+        this.setState({ preview: _extends({}, val.range, { color: color }) });
+      } else {
+        this.setState({ preview: _extends({}, val, { color: color }) });
+      }
     }
   }, {
     key: 'render',

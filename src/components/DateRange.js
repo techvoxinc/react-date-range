@@ -25,9 +25,9 @@ class DateRange extends Component {
     const { ranges, onChange, maxDate, moveRangeOnFirstSelection, disabledDates } = this.props;
     const focusedRangeIndex = focusedRange[0];
     const selectedRange = ranges[focusedRangeIndex];
-    if (!selectedRange || !onChange) return {};
+    if (!onChange) return {};
 
-    let { startDate, endDate } = selectedRange;
+    let { startDate, endDate } = selectedRange ? selectedRange : {startDate: new Date()};
     if (!endDate) endDate = new Date(startDate);
     let nextFocusRange;
     if (!isSingleValue) {
@@ -77,10 +77,12 @@ class DateRange extends Component {
     };
   }
   setSelection(value, isSingleValue) {
+    const cleanRange = {key: 'selection'}; // If there is no preselected range
     const { onChange, ranges, onRangeFocusChange } = this.props;
     const focusedRange = this.props.focusedRange || this.state.focusedRange;
     const focusedRangeIndex = focusedRange[0];
-    const selectedRange = ranges[focusedRangeIndex];
+    const selectedRange = (focusedRange[0]) ? ranges[focusedRange[0]] : cleanRange;
+
     if (!selectedRange) return;
     const newSelection = this.calcNewSelection(value, isSingleValue);
     onChange({
@@ -107,7 +109,12 @@ class DateRange extends Component {
     const { rangeColors, ranges } = this.props;
     const focusedRange = this.props.focusedRange || this.state.focusedRange;
     const color = (focusedRange[0]) ? ranges[focusedRange[0]].color || rangeColors[focusedRange[0]] : color;
-    this.setState({ preview: { ...val, color } });
+
+    if (val.range) {
+      this.setState({ preview: { ...val.range, color } });
+    } else {
+      this.setState({ preview: { ...val, color } });
+    }
   }
   render() {
     return (
